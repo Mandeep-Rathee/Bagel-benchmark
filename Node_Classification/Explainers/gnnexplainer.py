@@ -10,7 +10,6 @@ from torch_geometric.data import Data
 from torch_geometric.utils import k_hop_subgraph, to_networkx
 from torch_geometric.nn import APPNP
 
-from explainer import distortion
 
 EPS = 1e-15
 
@@ -248,50 +247,6 @@ class GNNExplainer(torch.nn.Module):
     def __repr__(self):
         return f'{self.__class__.__name__}()'
 
-    def distortion(self, node_idx, full_feature_matrix, edge_index, feature_mask, edge_mask=None, node_mask=None,
-                   validity=False):
+  
 
-        computation_graph_feature_matrix, computation_graph_edge_index, mapping, hard_edge_mask, kwargs = \
-            self.__subgraph__(node_idx, full_feature_matrix, edge_index)
 
-        self.__clear_masks__()
-
-        log_logits = self.model(x=computation_graph_feature_matrix,
-                                edge_index=computation_graph_edge_index)
-        predicted_labels = log_logits.argmax(dim=-1)
-
-        predicted_label = predicted_labels[mapping]
-
-        # set edge mask
-        if edge_mask is not None:
-            param_edge_mask = torch.nn.Parameter(edge_mask[hard_edge_mask])
-            for module in self.model.modules():
-                if isinstance(module, MessagePassing):
-                    module.__explain__ = True
-                    module.__edge_mask__ = param_edge_mask
-
-        with torch.no_grad():
-            num_computation_graph_nodes = computation_graph_feature_matrix.size(0)
-            if node_mask is None:
-                # all nodes selected
-                node_mask = torch.ones((1, num_computation_graph_nodes))
-            else:
-                node_mask = node_mask
-
-            value = distortion(self.model,
-                               node_idx=mapping,
-                               full_feature_matrix=full_feature_matrix,
-                               computation_graph_feature_matrix=computation_graph_feature_matrix,
-                               edge_index=computation_graph_edge_index,
-                               node_mask=node_mask,
-                               feature_mask=feature_mask,
-                               predicted_label=predicted_label,
-                               samples=100,
-                               random_seed=12345,
-                               validity=validity,
-                               # device="cpu",
-                               )
-
-        self.__clear_masks__()
-
-        return value
