@@ -10,7 +10,6 @@ import torch.nn.functional as F
 from torch_geometric.nn import MessagePassing
 
 from torch_geometric.nn import APPNP
-from metric_survey import *
 from scipy.special import softmax
 from pgmpy.estimators import ConstraintBasedEstimator
 from pgmpy.estimators.CITests import chi_square
