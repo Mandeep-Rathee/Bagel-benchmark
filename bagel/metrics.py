@@ -6,6 +6,8 @@ from torch_geometric.utils import k_hop_subgraph
 from torch_geometric.nn import APPNP
 from scipy.stats import entropy
 
+from bagel.dataset. import eraser_dict 
+
 def subgraph(model, node_idx, x, edge_index, **kwargs):
     num_nodes, num_edges = x.size(0), edge_index.size(1)
 
