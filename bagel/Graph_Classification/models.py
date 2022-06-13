@@ -27,24 +27,17 @@ import json
 sys.path.insert(0, '../')
 
 
-dataset_type = 'linear'
-
-
-assert dataset_type in ['linear', 'complex'], "dataset type needs to be 'linear' or 'complex'"
-
-
-
 
 
 hidden_channels=64
 
 class GCN(torch.nn.Module):
-    def __init__(self, dataset_):
+    def __init__(self, dataset):
         super(GCN, self).__init__()
         torch.manual_seed(12345)
-        self.conv1 = GCNConv(dataset_[0], hidden_channels)
+        self.conv1 = GCNConv(dataset[0], hidden_channels)
         self.conv2 = GCNConv(hidden_channels, hidden_channels)
-        self.lin = nn.Linear(hidden_channels, dataset_[1])
+        self.lin = nn.Linear(hidden_channels, dataset[1])
 
     def forward(self, x, edge_index, batch):
         # 1. Obtain node embeddings
@@ -60,13 +53,13 @@ class GCN(torch.nn.Module):
 
 class GATNet(torch.nn.Module):
     # based on https://github.com/rusty1s/pytorch_geometric/blob/master/examples/gat.py
-    def __init__(self, dataset_):
+    def __init__(self, dataset):
         super(GATNet, self).__init__()
-        self.conv1 = GATConv(dataset_[0], 8, heads=8, dropout=0.6)
+        self.conv1 = GATConv(dataset[0], 8, heads=8, dropout=0.6)
         # On the Pubmed dataset, use heads=8 in conv2.
         self.conv2 = GATConv(8 * 8, hidden_channels, heads=1, concat=False,
                              dropout=0.6)
-        self.lin = nn.Linear(hidden_channels, dataset_[1])
+        self.lin = nn.Linear(hidden_channels, dataset[1])
 
     def forward(self, x, edge_index, batch):
         x = F.dropout(x, p=0.6, training=self.training)
@@ -82,10 +75,10 @@ class GATNet(torch.nn.Module):
 
 
 class GINConvNet(torch.nn.Module):
-    def __init__(self, dataset_):
+    def __init__(self, dataset):
         super(GINConvNet, self).__init__()
 
-        num_features = dataset_[0]
+        num_features = dataset[0]
         dim = 32
         nn1 = nn.Sequential(nn.Linear(num_features, dim), nn.ReLU(), nn.Linear(dim, dim))
         self.conv1 = GINConv(nn1)
@@ -97,7 +90,7 @@ class GINConvNet(torch.nn.Module):
 
         self.fc1 = nn.Linear(dim, dim)
         self.fc2 = nn.Linear(dim, dim)
-        self.lin = nn.Linear(dim, dataset_[1])
+        self.lin = nn.Linear(dim, dataset[1])
 
 
     def forward(self, x, edge_index,batch):
@@ -118,17 +111,17 @@ class GINConvNet(torch.nn.Module):
 
 
 class APPNP2Net(torch.nn.Module):
-    def __init__(self, dataset_):
+    def __init__(self, dataset):
         super(APPNP2Net, self).__init__()
         # default values from https://github.com/rusty1s/pytorch_geometric/blob/master/benchmark/citation/appnp.py
         self.dropout = 0.5
         self.hidden = 64
         self.K = 2  # adjusted to two layers
         self.alpha = 0.1
-        self.lin1 = nn.Linear(dataset_[0], self.hidden)
+        self.lin1 = nn.Linear(dataset[0], self.hidden)
         self.lin2 = nn.Linear(self.hidden, self.hidden)
         self.prop1 = APPNP(self.K, self.alpha)
-        self.lin = nn.Linear(self.hidden, dataset_[1])
+        self.lin = nn.Linear(self.hidden, dataset[1])
 
 
     def reset_parameters(self):
