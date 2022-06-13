@@ -6,7 +6,7 @@ from torch_geometric.utils import k_hop_subgraph
 from torch_geometric.nn import APPNP
 from scipy.stats import entropy
 
-from bagel.Dataset.create_movie_reviews import to_eraser_dict
+from Dataset.create_movie_reviews import to_eraser_dict
 
 def subgraph(model, node_idx, x, edge_index, **kwargs):
     num_nodes, num_edges = x.size(0), edge_index.size(1)
@@ -145,10 +145,10 @@ def fidelity(model,  # is a must
 #### entropy based sparsity,for further deatils read the documentation https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.entropy.html
 
 def sparsity(feature_sparsity, node_sparsity, feature_mask=None, node_mask=None):
-  if feature_sparsity:
-    return entropy(feature_mask)
-  else:
-    return entropy(node_mask)
+    if feature_sparsity:
+        return entropy(feature_mask)
+    else:
+        return entropy(node_mask)
 
 
 def f1(pre, rec):
@@ -173,7 +173,7 @@ def correctness(node_mask, ground_truth, mask_type,topk):
     
     for ex_node in explanation_nodes:
         if ex_node in ground_truth:
-        true_positive = true_positive + 1
+            true_positive = true_positive + 1
     recall = true_positive / gt_positive
     precision = true_positive / pred_positive 
     f1_score = f1(precision, recall)

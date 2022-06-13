@@ -5,12 +5,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+from torch_geometric.loader import DataLoader
+
 from torch_geometric.nn import global_mean_pool
 from models import *
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 import torch_geometric
 
-from bagel.Dataset.create_movie_reviews import *
+from Dataset.create_movie_reviews import *
 
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import GATConv
@@ -41,26 +45,31 @@ assert dataset_type in ['linear', 'complex'], "dataset type needs to be 'linear'
 dataset_dim = [300,2]
 
 model = GCN(dataset_dim)
+model.to(device)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 criterion = torch.nn.CrossEntropyLoss()
 
 #path_base = osp.join('..', '..')
-path_base = ''
+
+path_base = '/home/rathee/bagel/Dataset'
 
 if dataset_type == 'linear':
     dataset_class = AnnotatedMoviesLinear
 else:
     dataset_class = AnnotatedMoviesComplex
 
+def load_dataset():
+    train_dataset = dataset_class(path_base, preload_to=device)
+    test_dataset = dataset_class(path_base, dataset_type='test', preload_to=device)
+    print(len(test_dataset), 'test_dataset')
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
+    print(test_dataset[1])
 
-train_dataset = dataset_class(path_base, preload_to=device)
-test_dataset = dataset_class(path_base, dataset_type='test', preload_to=device)
-print(len(test_dataset), 'test_dataset')
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-print(test_dataset[1])
+    return train_loader, test_loader
 
+train_loader, test_loader = load_dataset()
 
 def train():
     model.train()
