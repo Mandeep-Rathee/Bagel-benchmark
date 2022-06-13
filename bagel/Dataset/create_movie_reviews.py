@@ -1,4 +1,4 @@
-############### create graph of text 
+############### create graph of text, we use movie reviews dataset with human annotations form eraser bechmark https://arxiv.org/abs/1911.03429
 
 import torch
 from torchtext.vocab import GloVe
