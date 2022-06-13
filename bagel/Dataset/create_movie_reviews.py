@@ -12,7 +12,7 @@ _removed_tokens = ['', ',', '.', '\'s', '"', '-', '?', '!', '/', '(', ')', '_', 
 
 
 class AnnotatedMoviesLinear(Dataset):
-    def __init__(self, base_path, dataset_name='movies', dataset_type='train', preload_to=None):
+    def __init__(self, base_path, dataset_name='movie_reviews', dataset_type='train', preload_to=None):
         super().__init__()
         assert dataset_type in ['val', 'test', 'train'], "val, test or train dataset possible"
         self.movies_list = []
@@ -82,7 +82,7 @@ class AnnotatedMoviesLinear(Dataset):
 
 
 class AnnotatedMoviesComplex(Dataset):
-    def __init__(self, base_path, dataset_name='movies', dataset_type='train', preload_to=None, max_connection_distance=2):
+    def __init__(self, base_path, dataset_name='movie_reviews', dataset_type='train', preload_to=None, max_connection_distance=2):
         super().__init__()
         assert dataset_type in ['val', 'test', 'train'], "val, test or train dataset possible"
         self.movies_list = []
