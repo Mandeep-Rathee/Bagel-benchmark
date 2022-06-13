@@ -142,9 +142,78 @@ def fidelity(model,  # is a must
   
 #### entropy based sparsity,for further deatils read the documentation https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.entropy.html
 
-def sparisty(feature_sparsity, node_sparsity, feature_mask=None, node_mask=None):
+def sparsity(feature_sparsity, node_sparsity, feature_mask=None, node_mask=None):
   if feature_sparsity:
     return entropy(feature_mask)
   else:
     return entropy(node_mask)
+
+
+def f1(pre, rec):
+    if pre == 0 or rec == 0:
+        return 0
+    return 2 * pre * rec / (pre + rec)
+
+######## defining the correctness of the explanation ################
+
+def correctness(node_mask, ground_truth, mask_type,topk):
+    gt_positive = 0
+    true_positive = 0
+    pred_positive = 0
+    
+    if mask_type=="soft":
+        values,explanation_nodes = node_mask.topk(topk) ## make sure node_mask is a tensor, we recomnd to use topk=20
+    else: 
+        explanation_nodes = node_mask.nonzero()     ## if masks are hard then simply retrieve the indices where the mask=1
+        
+    gt_positive = gt_positive + len(ground_truth)
+    pred_positive = pred_positive + len(explanation_nodes)  
+    
+    for ex_node in explanation_nodes:
+        if ex_node in ground_truth:
+        true_positive = true_positive + 1
+    recall = true_positive / gt_positive
+    precision = true_positive / pred_positive 
+    f1_score = f1(precision, recall)
+    
+    return precision, recall, f1_score
+
+
+
+############# the sufficiency and comprehensiveness and only for soft masks explanations 
+
+def suff_and_comp():
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    return suff, comp
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+        
+        
+
+        
+        
+    
+    
   
