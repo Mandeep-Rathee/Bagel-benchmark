@@ -10,6 +10,8 @@ from models import *
 
 import torch_geometric
 
+from bagel.Dataset.create_movie_reviews import *
+
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import GATConv
 from torch_geometric.nn import APPNP
