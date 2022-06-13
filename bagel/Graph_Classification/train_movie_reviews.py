@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 from torch_geometric.nn import global_mean_pool
-
+from models import *
 
 import torch_geometric
 
@@ -38,8 +38,7 @@ assert dataset_type in ['linear', 'complex'], "dataset type needs to be 'linear'
 
 dataset_dim = [300,2]
 
-model = APPNP2Net(dataset_dim)
-model_directory = 'GCN'
+model = GCN(dataset_dim)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 criterion = torch.nn.CrossEntropyLoss()
