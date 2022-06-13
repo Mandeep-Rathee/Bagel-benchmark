@@ -1,0 +1,36 @@
+Metadata-Version: 2.1
+Name: bagel-benchmark
+Version: 0.1.0
+Summary: Bagel: A Benchmark for Assessing Graph Neural Network Explanations
+Home-page: https://github.com/Mandeep-Rathee/Bagel-benchmark
+Author: Mandeep Rathee
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# Bagel
+Welcome to our Benchmark!!
+
+The code for our benchmark will be released here !!!
+## Node Classification
+
+For node classification, we measure **RDT-Fidelity, Sparsity and Correctness**
+
+
+
+ 
+```python
+pip istall bagel
+```
+
+```python
+from bagel import metrics
+from bagel.node_classification import models
+from bagel import exlainers
+
+sparsity = metrics.sparsity(node_masks,feature_mask)
+
+
+```
