@@ -26,13 +26,13 @@ For node classification, we measure **RDT-Fidelity, Sparsity and Correctness**
 
  
 ```python
-pip istall bagel
+pip istall bagel-benchmark
 ```
 
 ```python
-from bagel import metrics
-from bagel.node_classification import models
-from bagel import exlainers
+from bagel-benchmark import metrics
+from bagel-benchmark.node_classification import models
+from bagel-benchmark import exlainers
 
 sparsity = metrics.sparsity(node_masks,feature_mask)
 
