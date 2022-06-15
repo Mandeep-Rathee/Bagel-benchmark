@@ -1,5 +1,10 @@
+<h1 style="text-align:center">
+<img style="vertical-align:middle" width="220" height="180" src="https://raw.githubusercontent.com/benchmarkir/beir/main/images/color_logo_transparent_cropped.png" />
+</h1>
+
 # Bagel
 Welcome to our Benchmark!!
+
 
 The code for our benchmark will be released here !!!
 ## Node Classification
