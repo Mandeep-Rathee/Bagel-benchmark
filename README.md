@@ -1,5 +1,7 @@
 <h1 style="text-align:center">
-<img style="vertical-align:middle" width="220" height="180" src="https://raw.githubusercontent.com/benchmarkir/beir/main/images/color_logo_transparent_cropped.png" />
+<img style="vertical-align:middle" width="400" height="180" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/luh_logo.jpg" />
+<img style="vertical-align:middle" width="400" height="180" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/luh_logo.jpg" />
+
 </h1>
 
 # Bagel
