@@ -7,9 +7,10 @@
 # Bagel
 Welcome to our Benchmark!!
 <h1 style="text-align:center">
+<img style="vertical-align:middle" width="300" height="180" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/bagel-v2.pdf
+" />
 
  </h1>
-
 
 
 
