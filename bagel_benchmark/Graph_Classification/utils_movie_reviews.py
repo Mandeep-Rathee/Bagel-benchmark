@@ -96,10 +96,11 @@ def load_model(path, model):
          model.load_state_dict(torch.load(path))
      model.eval()
 
-
-for epoch in range(1, 201):
-    train()
-    train_acc = test(train_loader)
-    test_acc = test(test_loader)
-    print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
+    
+def train_gnn():
+    for epoch in range(1, 201):
+        train()
+        train_acc = test(train_loader)
+        test_acc = test(test_loader)
+        print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
 
