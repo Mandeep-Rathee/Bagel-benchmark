@@ -28,10 +28,39 @@ pip istall bagel-benchmark
 
 ```python
 from bagel-benchmark import metrics
-from bagel-benchmark.node_classification import models
+from bagel-benchmark.node_classification import utils
 from bagel-benchmark import exlainers
+```
+<p>
+ 1. load the dataset and train the GNN model.
+</p>
 
-sparsity = metrics.sparsity(node_masks,feature_mask)
+```python
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+data_set="Cora"
+dataset, data, results_path = utils.load_dataset(data_set)
+data.to(device)
+```
+```python
+model = utils.GCNNet(dataset)
+model.to(device)
 
+#### train the GNN model 
+accuracy = utils.train(model,data)
+```
+<p> 2. Generate the explanation for a given node </p>
+
+```python
+from explainers.grad_based_explainers import grad_weights
+explanation = grad_weights(model,data)
+```
+<p>3. Finally we evaluate the explanation</p>
+
+```python
+sparsity = metrics.sparsity(explanation)
+
+## we need to define the node_id for which we want to calculate the fidelity
+
+fidelity = metrics.fidelity(model, node_id, data.x, feature_mask=explanation)
 
 ```
