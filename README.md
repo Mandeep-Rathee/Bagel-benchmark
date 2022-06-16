@@ -61,7 +61,7 @@ sparsity = metrics.sparsity(explanation)
 
 ## we need to define the node_id for which we want to calculate the fidelity
 
-fidelity = metrics.fidelity(model, node_id, data.x, feature_mask=explanation)
+fidelity = metrics.fidelity(model, node_id, data.x,data.edge_index, feature_mask=explanation)
 
 ```
 <h2>Graph Classification</h2>
