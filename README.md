@@ -14,9 +14,6 @@
  </h1>
 
 
-<p>
- The code for our <em>benchmark</em> will be released here !!!
-</p>
 
 <h2>Node Classification</h2>
 
