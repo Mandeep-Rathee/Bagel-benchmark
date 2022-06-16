@@ -96,7 +96,7 @@ dataset_dim = [300,2] ### features size is 300 and there are 2 labels.
 model = GCN(dataset_dim)
 utils_movie_reviews.train_gnn(model)
 ```
-<p>3.Generate explanation </p2>
+<p>3. Generate explanation </p2>
 
 ```python
 #let idx is the index on the graph in the test loader
