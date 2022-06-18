@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+bagel_benchmark.egg-info/PKG-INFO
+bagel_benchmark.egg-info/SOURCES.txt
+bagel_benchmark.egg-info/dependency_links.txt
+bagel_benchmark.egg-info/requires.txt
+bagel_benchmark.egg-info/top_level.txt
