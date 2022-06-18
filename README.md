@@ -23,6 +23,7 @@ For node classification, we measure **RDT-Fidelity, Sparsity and Correctness**
 
  
 ```python
+### the pypi package is still in test phase, We will release it soon!!!
 pip install bagel-benchmark
 ```
 
