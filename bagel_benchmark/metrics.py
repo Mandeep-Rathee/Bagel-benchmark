@@ -147,7 +147,7 @@ def fidelity(model,  # is a must
 def sparsity(feature_sparsity, node_sparsity, feature_mask=None, node_mask=None):
     if feature_sparsity:
         return entropy(feature_mask)
-    elif:
+    else:
         return entropy(node_mask)
 
 
