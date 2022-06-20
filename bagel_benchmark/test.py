@@ -34,3 +34,15 @@ feature_mask = torch.from_numpy(feature_mask).reshape(1,-1)
 fidelity = metrics.fidelity(model, node, data.x,data.edge_index, feature_mask=feature_mask)
 
 print(fidelity)
+
+
+from bagel_benchmark.graph_classification import utils_movie_reviews
+from bagel_benchmark.graph_classification import models
+
+
+train_loader, test_loader = utils_movie_reviews.load_dataset
+
+
+dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
+model = GCN(dataset_dim)
+utils_movie_reviews.train_gnn(model)
