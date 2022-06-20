@@ -8,13 +8,16 @@ import torch.optim as optim
 from torch_geometric.loader import DataLoader
 
 from torch_geometric.nn import global_mean_pool
+
+sys.path.insert(0, '../')
+
 from models import *
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 import torch_geometric
 
-from Dataset.create_movie_reviews import *
+from dataset.create_movie_reviews import *
 
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import GATConv
@@ -30,7 +33,6 @@ import sys
 import tqdm
 import json
 
-sys.path.insert(0, '../')
 
 
 dataset_type = 'linear'
