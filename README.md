@@ -30,13 +30,14 @@ pip install bagel-benchmark
 ```python
 from bagel-benchmark import metrics
 from bagel-benchmark.node_classification import utils
-from bagel-benchmark import exlainers
+from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
 ```
 <p>
  1. load the dataset and train the GNN model.
 </p>
 
 ```python
+import torch
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 data_set="Cora"
 dataset, data, results_path = utils.load_dataset(data_set)
