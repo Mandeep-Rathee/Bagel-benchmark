@@ -28,8 +28,8 @@ pip install bagel-benchmark
 ```
 
 ```python
-from bagel-benchmark import metrics
-from bagel-benchmark.node_classification import utils
+from bagel_benchmark import metrics
+from bagel_benchmark.node_classification import utils
 from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
 ```
 <p>
@@ -98,8 +98,8 @@ for example, for the text
 
 
 ```python
-from bagel-benchmark.graph_classification import utils_movie_reviews
-from bagel-benchmark.graph_classification import models
+from bagel_benchmark.graph_classification import utils_movie_reviews
+from bagel_benchmark.graph_classification import models
 
 
 train_loader, test_loader = utils_movie_reviews.load_dataset
