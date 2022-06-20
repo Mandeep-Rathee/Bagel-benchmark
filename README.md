@@ -48,22 +48,33 @@ model = utils.GCNNet(dataset)
 model.to(device)
 
 #### train the GNN model 
-accuracy = utils.train(model,data)
+accuracy = utils.train_model(model,data)
 ```
 <p> 2. Generate the explanation. </p>
 
 ```python
-from explainers.grad_based_explainers import grad_weights
-explanation = grad_weights(model,data)
+node = 10
+feature_mask, node_mask = grad_node_explanation(model,node,data.x, data.edge_index)
+print(feature_mask)
+print(node_mask)
 ```
 <p>3. Finally we evaluate the explanation.</p>
 
 ```python
-sparsity = metrics.sparsity(explanation)
 
-## we need to define the node_id for which we want to calculate the fidelity
+#### Calculate Sparsity 
+feature_sparsity = False
+Node_sparsity = True
+sparsity = metrics.sparsity(feature_sparsity, Node_sparsity, feature_mask, node_mask)
+print(sparsity)
 
-fidelity = metrics.fidelity(model, node_id, data.x,data.edge_index, feature_mask=explanation)
+### Calculate RDT-Fidelity
+
+feature_mask = torch.from_numpy(feature_mask).reshape(1,-1)
+fidelity = metrics.fidelity(model, node, data.x,data.edge_index, feature_mask=feature_mask)
+print(fidelity)
+
+
 
 ```
 <h2>Graph Classification</h2>
