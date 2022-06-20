@@ -98,16 +98,16 @@ for example, for the text
 
 
 ```python
-from bagel_benchmark.graph_classification import utils_movie_reviews
-from bagel_benchmark.graph_classification import models
+from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
+from bagel_benchmark.graph_classification.models import GCN
 
 
-train_loader, test_loader = utils_movie_reviews.load_dataset
+train_loader, test_loader = load_dataset()
 
 
 dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
 model = GCN(dataset_dim)
-utils_movie_reviews.train_gnn(model)
+train_gnn(model, train_loader, test_loader)
 ```
 <p>3. Generate the explanation </p2>
 
@@ -119,7 +119,7 @@ explanation = grad_weights(model, test_loader[idx])
 <p>4. Finally evaluate the explanation </p2>
 
 ```python
-suff, comp = metrics.suff_and_comp(idx,model,explanation,test_loader)
+suff, comp = metrics.suff_and_comp(idx, model,explanation,test_loader)
 ```
 
 
