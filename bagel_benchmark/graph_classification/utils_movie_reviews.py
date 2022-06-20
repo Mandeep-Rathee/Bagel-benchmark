@@ -10,9 +10,8 @@ from torch_geometric.loader import DataLoader
 
 from torch_geometric.nn import global_mean_pool
 
-sys.path.insert(0, '../')
 
-from models import *
+
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -47,15 +46,15 @@ assert dataset_type in ['linear', 'complex'], "dataset type needs to be 'linear'
 
 dataset_dim = [300,2]
 
-model = GCN(dataset_dim)
-model.to(device)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
 criterion = torch.nn.CrossEntropyLoss()
 
 #path_base = osp.join('..', '..')
 
-path_base = '/home/rathee/bagel/Dataset'
+path_base = '../bagel_benchmark/dataset'
+
+
 
 if dataset_type == 'linear':
     dataset_class = AnnotatedMoviesLinear
@@ -65,16 +64,14 @@ else:
 def load_dataset():
     train_dataset = dataset_class(path_base, preload_to=device)
     test_dataset = dataset_class(path_base, dataset_type='test', preload_to=device)
-    print(len(test_dataset), 'test_dataset')
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    print(test_dataset[1])
-
     return train_loader, test_loader
 
-train_loader, test_loader = load_dataset()
 
-def train():
+
+def train(model,train_loader):
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     model.train()
     for data in train_loader:  # Iterate in batches over the training dataset.
          out = model(data.x, data.edge_index, data.batch)  # Perform a single forward pass.
@@ -100,9 +97,9 @@ def load_model(path, model):
      model.eval()
 
     
-def train_gnn():
+def train_gnn(model, train_loader, test_loader):
     for epoch in range(1, 201):
-        train()
+        train(model,train_loader)
         train_acc = test(train_loader)
         test_acc = test(test_loader)
         print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')

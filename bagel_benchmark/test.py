@@ -4,45 +4,22 @@ from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
 
 import torch
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-data_set="Cora"
-dataset, data, results_path = utils.load_dataset(data_set)
-data.to(device)
+device ='cpu'
 
 
-model = utils.GCNNet(dataset)
-model.to(device)
-
-#### train the GNN model 
-accuracy = utils.train_model(model,data)
-print(accuracy)
-
-
-node = 10
-feature_mask, node_mask = grad_node_explanation(model,node,data.x, data.edge_index)
-print(feature_mask)
-print(node_mask)
-
-feature_sparsity = False
-Node_sparsity = True
-
-
-sparsity = metrics.sparsity(feature_sparsity, Node_sparsity, feature_mask, node_mask)
-
-print(sparsity)
-feature_mask = torch.from_numpy(feature_mask).reshape(1,-1)
-
-fidelity = metrics.fidelity(model, node, data.x,data.edge_index, feature_mask=feature_mask)
-
-print(fidelity)
-
-
-from bagel_benchmark.graph_classification import utils_movie_reviews
-from bagel_benchmark.graph_classification import models
-
-
-train_loader, test_loader = utils_movie_reviews.load_dataset
+from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset
+from bagel_benchmark.graph_classification.models import GCN
 
 
 dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
 model = GCN(dataset_dim)
-utils_movie_reviews.train_gnn(model)
+
+train_loader, test_loader = load_dataset()
+print(train_loader)
+print(test_loader)
+
+
+
+utils_movie_reviews.train_gnn(model, train_loader, test_loader)
+
+
