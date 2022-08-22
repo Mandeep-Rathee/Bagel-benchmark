@@ -84,7 +84,7 @@ For graph classification we measure **Faithfulness (comprehensiveness and suffic
 <a> We show a demo for Movie Reviews dataset.</a>
  <p> <i class="bi bi-file-earmark-pdf"></i><a href="https://arxiv.org/pdf/1911.03429.pdf" rel="permalink">Movie Reviews dataset</a> </p>
  
-<p>1. <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/bagel_benchmark/Dataset/create_movie_reviews.py" rel="permalink">Generate the graph from text.</a> </p>
+<p>1. <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/bagel_benchmark/dataset/create_movie_reviews.py" rel="permalink">Generate the graph from text.</a> </p>
 for example, for the text
 
 "? romeo and juliet ' , and ? the twelfth night ' . it is easier for me to believe that he had a wet dream and that 's how all his plays develop , but please spare me all of this unnecessary melodrama."
