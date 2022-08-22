@@ -44,7 +44,8 @@ dataset, data, results_path = utils.load_dataset(data_set)
 data.to(device)
 ```
 ```python
-# We train 2 layers GNN models for 200 epochs. We use Adam optimizer to with weight decay 5e-4 and learnin rate of 0.01. 
+# We train 2 layers GNN models for 200 epochs. 
+# We use Adam optimizer to with weight decay 5e-4 and learnin rate of 0.01. 
 
 model = utils.GCNNet(dataset)
 model.to(device)
