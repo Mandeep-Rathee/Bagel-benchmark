@@ -84,7 +84,9 @@ print(fidelity)
 
 For graph classification we measure **Faithfulness (comprehensiveness and sufficiency), Plausibility and RDT-Fidelity**
 
-<a> We show a demo for Movie Reviews dataset.</a>
+<a> We show a demo for Movie Reviews dataset. The raw text dataset is stored in this   <p> <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/tree/main/bagel_benchmark/dataset/movie_reviews" rel="permalink">folder.</a> </p>
+</a>
+
  <p> <i class="bi bi-file-earmark-pdf"></i><a href="https://arxiv.org/pdf/1911.03429.pdf" rel="permalink">Movie Reviews dataset</a> </p>
  
  
