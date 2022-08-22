@@ -84,6 +84,8 @@ For graph classification we measure **Faithfulness (comprehensiveness and suffic
 <a> We show a demo for Movie Reviews dataset.</a>
  <p> <i class="bi bi-file-earmark-pdf"></i><a href="https://arxiv.org/pdf/1911.03429.pdf" rel="permalink">Movie Reviews dataset</a> </p>
  
+ Click here to to create the graphs from the text  
+ 
 <p>1. <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/bagel_benchmark/dataset/create_movie_reviews.py" rel="permalink">Generate the graph from text.</a> </p>
 for example, for the text
 
@@ -101,6 +103,7 @@ for example, for the text
 from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
 from bagel_benchmark.graph_classification.models import GCN
 
+#### the movie review dataset can be loaded 
 
 train_loader, test_loader = load_dataset()
 
