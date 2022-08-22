@@ -26,6 +26,14 @@ import json
 
 sys.path.insert(0, '../')
 
+def load_dataset(data_set):
+    if data_set == 'PROTEINS':
+        dataset = TUDataset(root='data/TUDataset', name='PROTEINS')
+    elif data_set=="MUTAG":
+        dataset = TUDataset(root='data/TUDataset', name='MUTAG')
+    elif data_set=='ENZYMES':
+        dataset = TUDataset(root='data/ENYYMES',name='ENZYMES')
+    return dataset
 
 
 
