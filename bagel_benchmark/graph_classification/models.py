@@ -28,11 +28,11 @@ sys.path.insert(0, '../')
 
 def load_dataset(data_set):
     if data_set == 'PROTEINS':
-        dataset = TUDataset(root='data/TUDataset', name='PROTEINS')
+        dataset = TUDataset(root='data/TUDataset', name=data_set)
     elif data_set=="MUTAG":
-        dataset = TUDataset(root='data/TUDataset', name='MUTAG')
+        dataset = TUDataset(root='data/TUDataset', name=data_set)
     elif data_set=='ENZYMES':
-        dataset = TUDataset(root='data/ENYYMES',name='ENZYMES')
+        dataset = TUDataset(root='data/ENYYMES',name=data_set)
     return dataset
 
 
