@@ -105,7 +105,6 @@ for example, for the text
 
 
 ```python
-from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
 from bagel_benchmark.graph_classification import models
 
 ## The molecules dataset can be loaded as
@@ -115,7 +114,9 @@ dataset = models.load_dataset(data_set)
 
  
 
-#### load the movie review dataset 
+#### load the movie review dataset and train the GNN model
+
+from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
 
 train_loader, test_loader = load_dataset()
 
