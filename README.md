@@ -106,7 +106,14 @@ for example, for the text
 
 ```python
 from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
-from bagel_benchmark.graph_classification.models import GCN
+from bagel_benchmark.graph_classification import models
+
+## The molecules dataset can be loaded as
+
+data_set = "ENZYMES"   ### Similalry MUTAG or PROTEINS can be loaded by replacing data_set="MUTAG" or "PROTEINS"
+dataset = models.load_dataset(data_set)
+
+ 
 
 #### load the movie review dataset 
 
@@ -114,7 +121,7 @@ train_loader, test_loader = load_dataset()
 
 
 dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
-model = GCN(dataset_dim)
+model = models.GCN(dataset_dim)
 train_gnn(model, train_loader, test_loader)
 ```
 <p>3. Generate the explanation </p2>
