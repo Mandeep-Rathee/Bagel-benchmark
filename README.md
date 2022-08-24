@@ -39,7 +39,7 @@ from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
 We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an INVIDIA A100 GPU.
 
 **Parameters settings for all dataset**
- GNN layers | epochs | optimizer | learning rate | weight decay | 
+ GNN layers | epochs | optimizer | lr | weight decay | 
  --- | --- | --- |--- |--- |
   2 | 200 | Adam | 0.01 | 5e-4|
 
@@ -115,7 +115,7 @@ We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an I
 
 
 **Parameters settings**
- Dataset |GNN layers | epochs | optimizer | learning rate | weight decay | pooling |
+ Dataset |GNN layers | epochs | optimizer | lr | weight decay | pooling |
  ---|--- | --- | --- |--- |--- |---|
   MUTAG|2 | 200 | Adam | 0.01 | 0.0|mean|
   PROTEINS |2 | 200 | Adam | 0.01 |0.0 |mean|
