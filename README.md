@@ -117,9 +117,9 @@ We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an I
 **Parameters settings**
  Dataset |GNN layers | epochs | optimizer | learning rate | weight decay | pooling |
  ---|--- | --- | --- |--- |--- |---|
-  MUTAG|2 | 200 | Adam | 0.01 | 5e-4|mean|
-  PROTEINS |2 | 200 | Adam | 0.01 | 5e-4|mean|
-  ENZYMES |2 | 200 | Adam | 0.001 | 5e-4|mean|
+  MUTAG|2 | 200 | Adam | 0.01 | 0.0|mean|
+  PROTEINS |2 | 200 | Adam | 0.01 |0.0 |mean|
+  ENZYMES |2 | 200 | Adam | 0.001 | 0.0 |mean|
 
 
 ```python
