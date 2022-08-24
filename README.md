@@ -36,6 +36,12 @@ from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
  1. load the dataset and train the GNN model.
 </p>
 
+**Parameters settings**
+ GNN layers | epochs | optimizer | learning rate | weight decay | 
+ --- | --- | --- |--- |--- |
+  2 | 200 | Adam | 0.01 | 5e-4|
+
+
 ```python
 import torch
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
