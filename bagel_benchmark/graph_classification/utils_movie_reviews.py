@@ -19,11 +19,6 @@ import torch_geometric
 
 from dataset.create_movie_reviews import *
 
-from torch_geometric.nn import GCNConv
-from torch_geometric.nn import GATConv
-from torch_geometric.nn import APPNP
-from torch_geometric.nn import GINConv
-
 
 import torch_geometric.utils as pyg_utils
 from torch.utils.data.dataloader import default_collate
@@ -73,21 +68,21 @@ def load_dataset():
 def train(model,train_loader):
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     model.train()
-    for data in train_loader:  # Iterate in batches over the training dataset.
-         out = model(data.x, data.edge_index, data.batch)  # Perform a single forward pass.
-         loss = criterion(out, data.y)  # Compute the loss.
-         loss.backward()  # Derive gradients.
-         optimizer.step()  # Update parameters based on gradients.
-         optimizer.zero_grad()  # Clear gradients.
+    for data in train_loader:  
+         out = model(data.x, data.edge_index, data.batch)  
+         loss = criterion(out, data.y)  
+         loss.backward()  
+         optimizer.step()  
+         optimizer.zero_grad() 
 
 def test(loader):
      model.eval()
      correct = 0
-     for data in loader:  # Iterate in batches over the training/test dataset.
+     for data in loader:  
          out = model(data.x, data.edge_index, data.batch)
-         pred = out.argmax(dim=1)  # Use the class with highest probability.
-         correct += int((pred == data.y).sum())  # Check against ground-truth labels.
-     return correct / len(loader.dataset)  # Derive ratio of correct predictions.
+         pred = out.argmax(dim=1)
+         correct += int((pred == data.y).sum())  
+     return correct / len(loader.dataset)  
 
 def load_model(path, model):
      if not torch.cuda.is_available():
