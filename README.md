@@ -36,6 +36,8 @@ from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
  1. load the dataset and train the GNN model.
 </p>
 
+We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an INVIDIA A100 GPU.
+
 **Parameters settings for all dataset**
  GNN layers | epochs | optimizer | learning rate | weight decay | 
  --- | --- | --- |--- |--- |
@@ -108,6 +110,9 @@ for example, for the text
 <img style="vertical-align:middle" width="900" height="380" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/text2graph.jpg" />
  </h1>
 <p>2. We train the GNN. </p2>
+
+We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an INVIDIA A100 GPU.
+
 
 **Parameters settings**
  Dataset |GNN layers | epochs | optimizer | learning rate | weight decay | pooling |
