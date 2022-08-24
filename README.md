@@ -36,7 +36,7 @@ from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
  1. load the dataset and train the GNN model.
 </p>
 
-**Parameters settings**
+**Parameters settings for all dataset**
  GNN layers | epochs | optimizer | learning rate | weight decay | 
  --- | --- | --- |--- |--- |
   2 | 200 | Adam | 0.01 | 5e-4|
@@ -109,6 +109,13 @@ for example, for the text
  </h1>
 <p>2. We train the GNN. </p2>
 
+**Parameters settings**
+ Dataset |GNN layers | epochs | optimizer | learning rate | weight decay | pooling |
+ ---|--- | --- | --- |--- |--- |---|
+  MUTAG|2 | 200 | Adam | 0.01 | 5e-4|mean|
+  PROTEINS |2 | 200 | Adam | 0.01 | 5e-4|mean|
+  ENZYMES |2 | 200 | Adam | 0.001 | 5e-4|mean|
+
 
 ```python
 from bagel_benchmark.graph_classification import models
@@ -117,9 +124,9 @@ from bagel_benchmark.graph_classification import models
 
 data_set = "ENZYMES"   ### Similalry MUTAG or PROTEINS can be loaded by replacing data_set="MUTAG" or "PROTEINS"
 dataset = models.load_dataset(data_set)
-
+```
  
-
+```python
 #### load the movie review dataset and train the GNN model
 
 from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
