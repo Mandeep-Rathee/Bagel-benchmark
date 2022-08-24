@@ -119,8 +119,9 @@ We run all our experiments on a servers with intel Xeon Silver 4210 CPU and an I
  ---|--- | --- | --- |--- |--- |---|
   MUTAG|2 | 200 | Adam | 0.01 | 0.0|mean|
   PROTEINS |2 | 200 | Adam | 0.01 |0.0 |mean|
-  ENZYMES |2 | 200 | Adam | 0.001 | 0.0 |mean|
   Movie Reviews |2 | 200 | Adam | 0.01 | 0.0 |mean|
+  ENZYMES |2 | 200 | Adam | 0.001 | 0.0 |mean|
+
 
 
 
