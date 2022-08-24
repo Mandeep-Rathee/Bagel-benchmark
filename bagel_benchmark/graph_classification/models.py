@@ -32,7 +32,7 @@ def load_dataset(data_set):
     elif data_set=="MUTAG":
         dataset = TUDataset(root='data/TUDataset', name=data_set)
     elif data_set=='ENZYMES':
-        dataset = TUDataset(root='data/ENYYMES',name=data_set)
+        dataset = TUDataset(root='data/ENYYMES',use_node_attr = True,name=data_set)
     return dataset
 
 
@@ -150,7 +150,7 @@ class APPNP2Net(torch.nn.Module):
         return x
 
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 criterion = torch.nn.CrossEntropyLoss()
 
 def train():
@@ -171,4 +171,10 @@ def test(loader):
          correct += int((pred == data.y).sum())  
      return correct / len(loader.dataset) 
 
+
+for epoch in range(1, 200):
+    train()
+    train_acc = test(train_loader)
+    test_acc = test(test_loader)
+    print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
 
