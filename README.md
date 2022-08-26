@@ -169,7 +169,7 @@ suff, comp = metrics.suff_and_comp(idx, model,explanation,test_loader)
 
 ## Citation
 
-If you find this benchmark useful in your research, Please cite our paper:
+If you find this benchmark useful in your research, Please consider citing our paper:
 
 ```BibTeX
 @article{rathee2022bagel,
