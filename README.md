@@ -167,6 +167,18 @@ suff, comp = metrics.suff_and_comp(idx, model,explanation,test_loader)
 ```
 
 
+## Citation
+
+If you find this benchmark useful in your research, Please cite our paper:
+
+```BibTeX
+@article{rathee2022bagel,
+  title={BAGEL: A Benchmark for Assessing Graph Neural Network Explanations},
+  author={Rathee, Mandeep and Funke, Thorben and Anand, Avishek and Khosla, Megha},
+  journal={arXiv preprint arXiv:2206.13983},
+  year={2022}
+}
+```
 
 
 
