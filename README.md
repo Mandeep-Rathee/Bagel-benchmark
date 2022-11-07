@@ -2,7 +2,7 @@
 <h1>Bagel</h1>
 <h2>Welcome to our Benchmark!!</h2>
 <h1 style="text-align:center">
-<img style="vertical-align:middle" width="900" height="380" src="https://anonymous.4open.science/r/Bagel-benchmark-F451/Images/bagel-v21024_1.jpg" />
+<img style="vertical-align:middle" width="900" height="380" src="https://anonymous.4open.science/r/Bagel-benchmark-02C9/Images/bagel-v21024_1.jpg" />
 
  </h1>
 
