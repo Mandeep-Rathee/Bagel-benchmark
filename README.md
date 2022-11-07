@@ -86,14 +86,14 @@ print(fidelity)
 
 For graph classification we measure **Faithfulness (comprehensiveness and sufficiency), Plausibility and RDT-Fidelity**
 
-<a> We show a demo for Movie Reviews dataset.</a>  <a>  The raw Movie Reviews text dataset is stored in this <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/tree/main/bagel_benchmark/dataset/movie_reviews" rel="permalink">folder.</a> 
+<a> We show a demo for Movie Reviews dataset.</a>  <a>  The raw Movie Reviews text dataset is stored in this <i class="bi bi-file-earmark-pdf"></i><a href="https://anonymous.4open.science/r/Bagel-benchmark-02C9/bagel_benchmark/dataset/movie_reviews/" rel="permalink">folder.</a> 
 </a>
 
  <p> <i class="bi bi-file-earmark-pdf"></i><a href="https://arxiv.org/pdf/1911.03429.pdf" rel="permalink">Movie Reviews dataset</a> </p>
  
  
  
-<p>1. <i class="bi bi-file-earmark-pdf"></i><a href="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/bagel_benchmark/dataset/create_movie_reviews.py" rel="permalink">Click here to create the graphs from the text. </a> </p>
+<p>1. <i class="bi bi-file-earmark-pdf"></i><a href="https://anonymous.4open.science/r/Bagel-benchmark-02C9/bagel_benchmark/dataset/create_movie_reviews.py" rel="permalink">Click here to create the graphs from the text. </a> </p>
 for example, for the text
 
 "? romeo and juliet ' , and ? the twelfth night ' . it is easier for me to believe that he had a wet dream and that 's how all his plays develop , but please spare me all of this unnecessary melodrama."
@@ -101,7 +101,7 @@ for example, for the text
 <h3>The following graph represents the text.</h3>
 
 <h1 style="text-align:center">
-<img style="vertical-align:middle" width="900" height="380" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/text2graph.jpg" />
+<img style="vertical-align:middle" width="900" height="380" src="https://anonymous.4open.science/r/Bagel-benchmark-02C9/Images/text2graph.jpg" />
  </h1>
 <p>2. We train the GNN. </p2>
 
