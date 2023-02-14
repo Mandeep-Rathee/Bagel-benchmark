@@ -1,6 +1,14 @@
 
+
+
+
 <h1>Bagel</h1>
 <h2>Welcome to our Benchmark!!</h2>
+<h1 style="text-align:center">
+<img style="vertical-align:middle" width="300" height="120" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/luh_logo.jpg" /> 
+<img style="vertical-align:middle" width="150" height="120" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/l3s_logo.jpeg" />
+<img style="vertical-align:middle" width="200" height="120" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/TU_Delft-logo.png" />
+</h1>
 <h1 style="text-align:center">
 <img style="vertical-align:middle" width="900" height="380" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/bagel-v21024_1.jpg" />
 
@@ -160,6 +168,20 @@ explanation = grad_weights(model, test_loader[idx])
 
 ```python
 suff, comp = metrics.suff_and_comp(idx, model,explanation,test_loader)
+```
+
+
+## Citation
+
+If you find this benchmark useful in your research, Please consider citing our paper:
+
+```BibTeX
+@article{rathee2022bagel,
+  title={BAGEL: A Benchmark for Assessing Graph Neural Network Explanations},
+  author={Rathee, Mandeep and Funke, Thorben and Anand, Avishek and Khosla, Megha},
+  journal={arXiv preprint arXiv:2206.13983},
+  year={2022}
+}
 ```
 
 
