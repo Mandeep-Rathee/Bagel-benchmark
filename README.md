@@ -14,7 +14,9 @@
 
  </h1>
 
-
+<h2>  
+Click <a href="https://arxiv.org/abs/2206.13983" rel="permalink"> here </a> for the arxiv version of Bagel Benchmark.
+</h2>
 
 <h2>Node Classification</h2>
 
