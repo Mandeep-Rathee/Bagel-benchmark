@@ -11,13 +11,16 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import global_mean_pool
 
 
+sys.path.append('/home/rathee/Bagel-benchmark/bagel_benchmark')
 
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 import torch_geometric
 
 from dataset.create_movie_reviews import *
+from graph_classification import models
+
 
 
 import torch_geometric.utils as pyg_utils
@@ -61,7 +64,7 @@ def load_dataset():
     test_dataset = dataset_class(path_base, dataset_type='test', preload_to=device)
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    return train_loader, test_loader
+    return train_loader, test_loader, test_dataset
 
 
 
@@ -75,7 +78,7 @@ def train(model,train_loader):
          optimizer.step()  
          optimizer.zero_grad() 
 
-def test(loader):
+def test(model, loader):
      model.eval()
      correct = 0
      for data in loader:  
@@ -93,9 +96,21 @@ def load_model(path, model):
 
     
 def train_gnn(model, train_loader, test_loader):
-    for epoch in range(1, 201):
+    for epoch in range(1, 10):
         train(model,train_loader)
-        train_acc = test(train_loader)
-        test_acc = test(test_loader)
+        train_acc = test(model,train_loader)
+        test_acc = test(model, test_loader)
         print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
+
+
+
+# model = models.GCN(dataset_dim)
+
+# train_loader, test_loader, _ = load_dataset()
+
+
+# train_gnn(model, train_loader=train_loader, test_loader=test_loader)
+
+
+
 

@@ -1,0 +1,5 @@
+**/__pycache__
+bagel_benchmark/.vector_cache
+bagel_benchmark/graph_correctness
+bagel_benchmark/wandb
+bagel_benchmark/run_correctness.sh

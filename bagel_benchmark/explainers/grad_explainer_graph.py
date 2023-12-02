@@ -112,7 +112,7 @@ def autograd_data(model, data, attribution_mask=None, is_cam=False):
         if is_cam:
             prediction = model.forward(batch, is_cam)
         else:
-            prediction = model.forward(batch)
+            prediction = model.forward(batch.x, batch.edge_index, batch.batch)
         if attribution_mask is not None:
             prediction = prediction[attribution_mask]
         loss = prediction_val(prediction)
@@ -175,7 +175,7 @@ def smooth_grad_weights(model, data, p=2, n=100, sigma=0.15, attribution_mask=No
     loader = tqdm(smoothing_loader) if show_progress else smoothing_loader
     for batch in loader:
         batch.x.requires_grad = True
-        prediction = model(batch)
+        prediction = model(batch.x, batch.edge_index, batch.batch)
         if attribution_mask is not None:
             prediction = prediction[attribution_mask]
         loss = prediction_val(prediction)
@@ -212,7 +212,7 @@ def integrated_gradients_weights(model, data, n=100, p=2, attribution_mask=None,
         attribution_mask = attr_mask(data, attribution_mask)
     ig_loader = DataLoader(IntegrationPointDataset(data, n=n), batch_size=1, shuffle=True)
     for batch in DataLoader(PointDataset(data), batch_size=1):
-        base_prediction = model(batch)
+        base_prediction = model(batch.x, batch.edge_index, batch.batch)
     if attribution_mask is not None:
         base_prediction = base_prediction[attribution_mask]
     prediction_idx = base_prediction.argmax().item()

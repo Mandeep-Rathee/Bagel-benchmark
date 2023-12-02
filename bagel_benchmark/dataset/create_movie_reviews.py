@@ -181,7 +181,7 @@ def _tensor_to_str_dict(t):
 device = 'cuda'
 
 
-def to_eraser_dict(dataset, idx, weights, model=None, device=device, k=None):
+def to_eraser_dict(dataset, idx, weights, model=None, odd=False, device=device, k=None):
     txt, indices = dataset.get_text(idx)
     txt_len = len(txt.split(' '))
     annotation_id = dataset.movies_list[idx]["annotation_id"]
@@ -217,6 +217,7 @@ def to_eraser_dict(dataset, idx, weights, model=None, device=device, k=None):
             top_k_node_mask[max_idx] = 1
 
         # construct subgraphs with only top k_d nodes and without top k_d nodes
+
         top_k_node_map = list(range(data.x.shape[0]))
         non_top_k_node_map = list(range(data.x.shape[0]))
         for i, b in enumerate(top_k_node_mask):
@@ -240,10 +241,13 @@ def to_eraser_dict(dataset, idx, weights, model=None, device=device, k=None):
         non_top_k_data.batch = torch.zeros(non_top_k_data.x.shape[0], device=device).long()
 
         # get model predictions of all 3 graphs
+        data.to(device)
+        top_k_data.to(device)
+        top_k_data.to(device)
         with torch.no_grad():
-            pred = model(data.to(device))
-            top_k_pred = model(top_k_data.to(device))
-            non_top_k_pred = model(non_top_k_data.to(device))
+            pred = model(data.x, data.edge_index, data.batch)
+            top_k_pred = model(top_k_data.x, top_k_data.edge_index, top_k_data.batch)
+            non_top_k_pred = model(non_top_k_data.x, non_top_k_data.edge_index, non_top_k_data.batch)
         rationale_obj["classification"] = "NEG" if pred.argmax() == 0 else "POS"
         rationale_obj["classification_scores"] = _tensor_to_str_dict(pred)
         rationale_obj["comprehensiveness_classification_scores"] = _tensor_to_str_dict(top_k_pred)
@@ -253,5 +257,6 @@ def to_eraser_dict(dataset, idx, weights, model=None, device=device, k=None):
         aopc_dic["comprehensiveness_classification_scores"] = top_k_pred
         aopc_dic["sufficiency_classification_scores"] = non_top_k_pred
         aopc_dic["threshold"] = k
+
 
     return rationale_obj, aopc_dic

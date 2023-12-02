@@ -150,31 +150,54 @@ class APPNP2Net(torch.nn.Module):
         return x
 
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-criterion = torch.nn.CrossEntropyLoss()
+def edge_mask_to_node_mask(data, edge_mask, aggregation="sum"):
+    node_weights = torch.zeros(data.x.shape[0])
+    if aggregation == "sum":
+        for weight, nodes in zip(edge_mask, data.edge_index.T):
+            node_weights[nodes[0].item()] += weight.item() / 2
+            node_weights[nodes[1].item()] += weight.item() / 2
+    elif aggregation == "mean":
+        node_degrees = torch.zeros(data.x.shape[0])
+        for weight, nodes in zip(edge_mask, data.edge_index.T):
+            node_weights[nodes[0].item()] += weight.item()
+            node_weights[nodes[1].item()] += weight.item()
+            node_degrees[nodes[0].item()] += 1
+            node_degrees[nodes[1].item()] += 1
+        node_weights = node_weights / node_degrees.clamp(min=1.)
+    elif aggregation == "max":
+        for weight, nodes in zip(edge_mask, data.edge_index.T):
+            node_weights[nodes[0].item()] = max(weight.item(), node_weights[nodes[0].item()])
+            node_weights[nodes[1].item()] = max(weight.item(), node_weights[nodes[1].item()])
+    else:
+        raise NotImplementedError(f"No such aggregation method: {aggregation}")
+    return node_weights
 
-def train():
-    model.train()
-    for data in train_loader: 
-         out = model(data.x, data.edge_index, data.batch)  
-         loss = criterion(out, data.y) 
-         loss.backward()  
-         optimizer.step()  
-         optimizer.zero_grad() 
 
-def test(loader):
-     model.eval()
-     correct = 0
-     for data in loader:  
-         out = model(data.x, data.edge_index, data.batch)
-         pred = out.argmax(dim=1)  
-         correct += int((pred == data.y).sum())  
-     return correct / len(loader.dataset) 
+# optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+# criterion = torch.nn.CrossEntropyLoss()
+
+# def train():
+#     model.train()
+#     for data in train_loader: 
+#          out = model(data.x, data.edge_index, data.batch)  
+#          loss = criterion(out, data.y) 
+#          loss.backward()  
+#          optimizer.step()  
+#          optimizer.zero_grad() 
+
+# def test(loader):
+#      model.eval()
+#      correct = 0
+#      for data in loader:  
+#          out = model(data.x, data.edge_index, data.batch)
+#          pred = out.argmax(dim=1)  
+#          correct += int((pred == data.y).sum())  
+#      return correct / len(loader.dataset) 
 
 
-for epoch in range(1, 200):
-    train()
-    train_acc = test(train_loader)
-    test_acc = test(test_loader)
-    print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
+# for epoch in range(1, 200):
+#     train()
+#     train_acc = test(train_loader)
+#     test_acc = test(test_loader)
+#     print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
 
