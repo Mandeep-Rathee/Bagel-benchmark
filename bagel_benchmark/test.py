@@ -4,8 +4,6 @@ sys.path.append('/home/rathee/Bagel-benchmark')
 
 
 from bagel_benchmark.metrics import suff_and_comp
-from bagel_benchmark.node_classification import utils
-from bagel_benchmark.explainers.grad_explainer_node import grad_node_explanation
 from bagel_benchmark.explainers.grad_explainer_graph import grad_weights
 
 

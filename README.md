@@ -151,8 +151,11 @@ dataset = models.load_dataset(data_set)
 #### load the movie review dataset and train the GNN model
 
 from bagel_benchmark.graph_classification.utils_movie_reviews import load_dataset, train_gnn
+from bagel_benchmark.metrics import suff_and_comp
+from bagel_benchmark.explainers.grad_explainer_graph import grad_weights
 
-train_loader, test_loader = load_dataset()
+
+train_loader, test_loader, test_loader = load_dataset()
 
 
 dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
@@ -163,13 +166,17 @@ train_gnn(model, train_loader, test_loader)
 
 ```python
 #let idx is the index on the graph in the test loader
-explanation = grad_weights(model, test_loader[idx])
+data = test_dataset[idx]
+data.batch = torch.zeros(data.x.shape[0], device=device).long()
+
+
+explanation = grad_weights(model, data)
 
 ```
 <p>4. Finally evaluate the explanation </p2>
 
 ```python
-suff, comp = metrics.suff_and_comp(idx, model,explanation,test_loader)
+suff, comp = suff_and_comp(idx, model,explanation,test_dataset)
 ```
 
 
