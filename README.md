@@ -155,7 +155,7 @@ from bagel_benchmark.metrics import suff_and_comp
 from bagel_benchmark.explainers.grad_explainer_graph import grad_weights
 
 
-train_loader, test_loader, test_loader = load_dataset()
+train_loader, test_loader, test_dataset = load_dataset()
 
 
 dataset_dim = [300,2] ### features size is 300 and there are 2 labels. 
