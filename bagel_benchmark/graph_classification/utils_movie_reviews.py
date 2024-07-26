@@ -96,7 +96,7 @@ def load_model(path, model):
 
     
 def train_gnn(model, train_loader, test_loader):
-    for epoch in range(1, 10):
+    for epoch in range(1, 100):
         train(model,train_loader)
         train_acc = test(model,train_loader)
         test_acc = test(model, test_loader)

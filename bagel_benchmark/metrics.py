@@ -7,7 +7,7 @@ from torch_geometric.utils import k_hop_subgraph
 from torch_geometric.nn import APPNP
 from scipy.stats import entropy
 
-from dataset.create_movie_reviews import to_eraser_dict
+from bagel_benchmark.dataset.create_movie_reviews import to_eraser_dict,  to_eraser_dict_with_connected_graph
 
 def subgraph(model, node_idx, x, edge_index, **kwargs):
     num_nodes, num_edges = x.size(0), edge_index.size(1)
@@ -50,7 +50,8 @@ def fidelity(model,  # is a must
              edge_mask=None,
              samples=100,
              random_seed=12345,
-             device="cpu"
+             device=None,
+             topk=0.5
              ):
     """
     Distortion/Fidelity (for Node Classification)
@@ -70,7 +71,7 @@ def fidelity(model,  # is a must
     :param samples:
     :param random_seed:
     :param device:
-    :param validity:
+    :param topk: select topk % soft masks
     :return:
     """
     if edge_mask is None and feature_mask is None and node_mask is None:
@@ -81,7 +82,7 @@ def fidelity(model,  # is a must
 
     # get predicted label
     log_logits = model(x=computation_graph_feature_matrix,
-                       edge_index=computation_graph_edge_index)
+                       edge_index=computation_graph_edge_index, edge_mask= edge_mask)
     predicted_labels = log_logits.argmax(dim=-1)
 
     predicted_label = predicted_labels[mapping]
@@ -99,14 +100,29 @@ def fidelity(model,  # is a must
 
     # set edge mask
     if edge_mask is not None:
+        num_edges = edge_index.size(1)
         for module in model.modules():
             if isinstance(module, MessagePassing):
+                edge_mask =torch.nn.Parameter(edge_mask)
                 module.__explain__ = False
                 module.__edge_mask__ = edge_mask
+
+    topk = 0.5
+    if edge_mask is not None:
+        selected_edge_mask = torch.zeros(edge_mask.shape)
+        num_selected_nodes = int(edge_mask.shape[0]*topk)
+        values, selected_indices = edge_mask.topk(num_selected_nodes)
+
+        remaining_indices = torch.argsort(edge_mask, descending=True)[num_selected_nodes:]
+
+        selected_edge_mask[selected_indices] = 1.0
+        selected_edge_mask[remaining_indices] = 0.0 #edge_mask.min()     
+        selected_edge_mask = selected_edge_mask.to(device)       
 
     (num_nodes, num_features) = full_feature_matrix.size()
 
     num_nodes_computation_graph = computation_graph_feature_matrix.size(0)
+    num_edges_computation_graph = computation_graph_edge_index.size(1)
 
     # retrieve complete mask as matrix
     mask = node_mask.T.matmul(feature_mask)
@@ -119,16 +135,28 @@ def fidelity(model,  # is a must
                                    generator=rng,
                                    device=device,
                                    )
+    if edge_mask is not None:
+        random_edge_indices = torch.randint(num_edges, (samples, num_edges_computation_graph ),
+                                   generator=rng,
+                                   device=device,
+                                   )
+
+
     random_indices = random_indices.type(torch.int64)
 
     for i in range(samples):
         random_features = torch.gather(full_feature_matrix,
                                        dim=0,
                                        index=random_indices[i, :, :])
+        
+        # if edge_mask is not None:
+        #     radom_edge_masks = torch.gather(edge_mask,
+        #                                dim=0,
+        #                                index=random_edge_indices[i, :])
 
         randomized_features = mask * computation_graph_feature_matrix + (1 - mask) * random_features
 
-        log_logits = model(x=randomized_features, edge_index=computation_graph_edge_index)
+        log_logits = model(x=randomized_features, edge_index=computation_graph_edge_index, edge_mask = selected_edge_mask)
         distorted_labels = log_logits.argmax(dim=-1)
 
         if distorted_labels[mapping] == predicted_label:
@@ -213,7 +241,7 @@ def suff_and_comp(idx, model, explanation, test_dataset):
     
     aopc_dict_all = {}
     for t in thresholds:
-            dict_obj, aopc_dict_ = to_eraser_dict(test_dataset, idx, explanation, model=model, k=t)
+            dict_obj, aopc_dict_ = to_eraser_dict_with_connected_graph(test_dataset, idx, explanation, model=model, k=t)
             aopc_dict_all[t] = aopc_dict_
     comp = aopc_overall(aopc_dict_all, thresholds, key='comprehensiveness_classification_scores')
     suff = aopc_overall(aopc_dict_all, thresholds, key='sufficiency_classification_scores')   

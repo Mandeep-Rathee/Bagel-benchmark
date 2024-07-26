@@ -40,11 +40,11 @@ class GCNNet(torch.nn.Module):
         self.conv1 = GCNConv(dataset.num_node_features, 16)
         self.conv2 = GCNConv(16, dataset.num_classes)
 
-    def forward(self, x, edge_index):
-        x = self.conv1(x, edge_index)
+    def forward(self, x, edge_index, edge_mask):
+        x = self.conv1(x, edge_index, edge_mask)
         x = F.relu(x)
         x = F.dropout(x, training=self.training)
-        x = self.conv2(x, edge_index)
+        x = self.conv2(x, edge_index, edge_mask)
 
         return F.log_softmax(x, dim=1)
 
@@ -147,7 +147,7 @@ def train_model(model, data, epochs=200, lr=0.01, weight_decay=5e-4, clip=None, 
     model.train()
     for epoch in range(epochs):
         optimizer.zero_grad()
-        out = model(data.x, data.edge_index)
+        out = model(data.x, data.edge_index, None)
         if loss_function == "nll_loss":
             loss = F.nll_loss(out[data.train_mask], data.y[data.train_mask])
         elif loss_function == "cross_entropy":
@@ -178,7 +178,7 @@ def save_model(model, path):
 
 
 def retrieve_accuracy(model, data, test_mask=None, value=False):
-    _, pred = model(data.x, data.edge_index).max(dim=1)
+    _, pred = model(data.x, data.edge_index, None).max(dim=1)
     if test_mask is None:
         test_mask = data.test_mask
     correct = float(pred[test_mask].eq(data.y[test_mask]).sum().item())

@@ -1,16 +1,59 @@
+from copy import deepcopy
 import numpy as np
-import torch
-from torch_geometric.nn import MessagePassing
 import os
-import torch_geometric.utils as ut
 from pathlib import Path
+import torch
+from tqdm import tqdm
+
+
+
+from torch_geometric.nn import MessagePassing
+import torch_geometric.utils as ut
 from torch_geometric.utils import to_dense_adj,k_hop_subgraph
+from torch_geometric.data import DataLoader, Dataset, Data
 
 
 def save_model(model, path):
     torch.save(model.state_dict(), path)
-from torch_geometric.data import Data
-from torch_geometric.datasets import Planetoid
+
+
+
+def attr_mask(data, node_index):
+    attr_mask = torch.zeros_like(data.train_mask, dtype=bool)
+    attr_mask[node_index] = True
+    return attr_mask
+
+
+class PointDataset(Dataset):
+    def __init__(self, graph):
+        super().__init__()
+        if hasattr(graph, "batch"):
+            assert graph.batch.max().item() == 0
+            self.data = Data(x=graph.x.float(), edge_index=graph.edge_index, y=graph.y)
+        else:
+            self.data = graph
+
+    @staticmethod
+    def len():
+        return 1
+
+    def get(self, idx):
+        return self.data
+
+
+def prediction_val(out, idx=None):
+    if idx is None:
+        return out.max()
+    else:
+        if len(out.shape) == 2:
+            out = out.view(-1)
+        return out[idx]
+
+
+def normalize(tensor):
+    if tensor.abs().max().item() > 0.:
+        return tensor/tensor.sum(dim=0).item()
+    return tensor
 
 
 def edge_mask_to_node_mask(data, edge_mask, aggregation="mean"):
@@ -116,6 +159,27 @@ def gradinput_node_explanation(model, node, x, edge_index):
 
     return np.mean(feature_mask, axis=0), np.mean(feature_mask, axis=1)
 
+
+class IntegrationPointDataset(Dataset):
+    def __init__(self, graph, n=100):
+        super().__init__()
+        if hasattr(graph, "batch"):
+            assert graph.batch.max().item() == 0
+            self.data = Data(x=graph.x.float(), edge_index=graph.edge_index, y=graph.y)
+        else:
+            self.data = graph
+        self.n = n
+
+    def len(self):
+        return self.n
+
+    def get(self, idx):
+        data = deepcopy(self.data)
+        data.x = idx / self.n * data.x
+        return data
+
+
+
 def integrated_gradients_weight(model, data, n=100, p=2, attribution_mask=None, show_progress=False):
     if isinstance(attribution_mask, int):
         attribution_mask = attr_mask(data, attribution_mask)
@@ -140,6 +204,26 @@ def integrated_gradients_weight(model, data, n=100, p=2, attribution_mask=None, 
     weights = 1/n * data.x * ig_sum
     weights = weights.norm(p=p, dim=1)
     return normalize(weights)
+
+class SmoothingDataset(Dataset):
+    def __init__(self, graph, sigma=0.15, n=100):
+        super().__init__()
+        if hasattr(graph, "batch"):
+            assert graph.batch.max().item() == 0
+            self.data = Data(x=graph.x.float(), edge_index=graph.edge_index, y=graph.y)
+        else:
+            self.data = graph
+        self.sigma = sigma * torch.ones_like(graph.x)
+        self.n = n
+
+    def len(self):
+        return self.n
+
+    def get(self, idx):
+        sample = torch.normal(mean=0.0, std=self.sigma)
+        data = deepcopy(self.data)
+        data.x = data.x + sample
+        return data
 
 
 def smooth_grad_weight(model, data, p=2, n=100, sigma=0.15, attribution_mask=None, show_progress=False):
