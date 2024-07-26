@@ -10,7 +10,7 @@
 <img style="vertical-align:middle" width="200" height="120" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/TU_Delft-logo.png" />
 </h1>
 <h1 style="text-align:center">
-<img style="vertical-align:middle" width="900" height="380" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/bagel-main.pdf" type="application/pdf>
+<embed width="900" height="380" src="https://github.com/Mandeep-Rathee/Bagel-benchmark/blob/main/Images/bagel-main.pdf" type="application/pdf>
 
  </h1>
 
