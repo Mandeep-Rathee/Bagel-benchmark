@@ -260,3 +260,87 @@ def to_eraser_dict(dataset, idx, weights, model=None, odd=False, device=device, 
 
 
     return rationale_obj, aopc_dic
+
+
+
+def to_eraser_dict_with_connected_graph(dataset, idx, weights, model=None, odd=False, device=device, k=None):
+    txt, indices = dataset.get_text(idx)
+    txt_len = len(txt.split(' '))
+    annotation_id = dataset.movies_list[idx]["annotation_id"]
+    docid = annotation_id
+
+    if not len(weights) == txt_len:
+        expanded_weights = expand_weights(weights, indices, txt_len)
+    else:
+        expanded_weights = weights
+
+    rational_weights = [float(w) for w in expanded_weights]
+    rationale_obj = {"annotation_id": annotation_id, "rationales": [{"docid": docid, "soft_rationale_predictions": rational_weights}]}
+    aopc_dic = {}
+    if model is not None:
+        # do comprehensiveness & sufficiency
+        data = dataset[idx].to(device)
+        data.batch = torch.zeros(data.x.shape[0], device=device).long()
+        assert len(weights) == data.x.shape[0]
+        # get top k_d nodes
+        top_k_node_mask = torch.zeros(data.x.shape[0], device=device)
+        k_d = int((data.x.shape[0]*k))
+        if k_d <=1:
+            k_d=3
+        top_k_edge_index = []
+        non_top_k_edge_index = []
+        for _ in range(k_d):
+            max_weight = 0.
+            max_idx = -1
+            for i, w in enumerate(weights):
+                if (max_idx == -1 or w > max_weight) and top_k_node_mask[i] == 0:
+                    max_weight = w
+                    max_idx = i
+            top_k_node_mask[max_idx] = 1
+
+        # construct subgraphs with only top k_d nodes and without top k_d nodes
+
+        print("topk node masks", top_k_node_mask )
+
+        top_k_node_map = list(range(data.x.shape[0]))
+        non_top_k_node_map = list(range(data.x.shape[0]))
+        for i, b in enumerate(top_k_node_mask):
+            if b == 1:
+                non_top_k_node_map.remove(i)
+            else:
+                top_k_node_map.remove(i)
+        top_k_node_map = {j: i for i, j in enumerate(top_k_node_map)}
+        non_top_k_node_map = {j: i for i, j in enumerate(non_top_k_node_map)}
+        for i, edge in enumerate(data.edge_index.T):
+            if top_k_node_mask[edge[0].item()] == top_k_node_mask[edge[1].item()]:
+                if top_k_node_mask[edge[0].item()] == 0:
+                    non_top_k_edge_index.append([non_top_k_node_map[edge[0].item()], non_top_k_node_map[edge[1].item()]])
+                else:
+                    top_k_edge_index.append([top_k_node_map[edge[0].item()], top_k_node_map[edge[1].item()]])
+        if len(top_k_edge_index) == 0:
+            top_k_edge_index = [[0, 0]]
+        top_k_data = Data(x=data.x[top_k_node_mask.bool()], edge_index=torch.tensor(top_k_edge_index, device=device).long().T)
+        non_top_k_data = Data(x=data.x[~top_k_node_mask.bool()], edge_index=torch.tensor(non_top_k_edge_index, device=device).long().T)
+        top_k_data.batch = torch.zeros(top_k_data.x.shape[0], device=device).long()
+        non_top_k_data.batch = torch.zeros(non_top_k_data.x.shape[0], device=device).long()
+
+        # get model predictions of all 3 graphs
+        data.to(device)
+        top_k_data.to(device)
+        top_k_data.to(device)
+        with torch.no_grad():
+            pred = model(data.x, data.edge_index, data.batch)
+            top_k_pred = model(top_k_data.x, top_k_data.edge_index, top_k_data.batch)
+            non_top_k_pred = model(non_top_k_data.x, non_top_k_data.edge_index, non_top_k_data.batch)
+        rationale_obj["classification"] = "NEG" if pred.argmax() == 0 else "POS"
+        rationale_obj["classification_scores"] = _tensor_to_str_dict(pred)
+        rationale_obj["comprehensiveness_classification_scores"] = _tensor_to_str_dict(top_k_pred)
+        rationale_obj["sufficiency_classification_scores"] = _tensor_to_str_dict(non_top_k_pred)
+        aopc_dic["classification"] = 0 if pred.argmax() == 0 else 1
+        aopc_dic["classification_scores"] = pred
+        aopc_dic["comprehensiveness_classification_scores"] = top_k_pred
+        aopc_dic["sufficiency_classification_scores"] = non_top_k_pred
+        aopc_dic["threshold"] = k
+
+
+    return rationale_obj, aopc_dic

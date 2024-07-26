@@ -43,7 +43,6 @@ explanation = grad_weights(model, data)
 suff, comp = suff_and_comp(10, model,explanation,test_dataset)
 
 print("suf", suff, "comp: ", comp)
-exit()
 
 
 

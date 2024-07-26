@@ -2,14 +2,13 @@
 import sys
 import numpy as np
 import torch
-
+from tqdm import tqdm
 
 from torch_geometric.utils import k_hop_subgraph
 from torch_geometric.nn import MessagePassing, APPNP
 
 
 
-# sys.path.append('/home/rathee/Bagel-benchmark/bagel_benchmark')
 sys.path.append('/home/rathee/Bagel-benchmark')
 
 
@@ -74,7 +73,7 @@ def subgraph(model, node_idx, x, edge_index, **kwargs):
 
 node_level_fid =[]
 
-for node in selected_nodes:
+for node in tqdm(selected_nodes):
     node  = torch.tensor(node)
     node = node.item()
 
@@ -104,7 +103,7 @@ for node in selected_nodes:
     node_level_fid.append(np.mean(bin_level_fid))
 
 
-print(f"Over all fidelity for {explainer} and {data_set} with GCN is {np.mean(node_level_fid)}")
+print(f"Over all edge-level fidelity for {explainer} and {data_set} with GCN is {np.mean(node_level_fid)}")
 
 
 

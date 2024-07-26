@@ -241,7 +241,7 @@ def suff_and_comp(idx, model, explanation, test_dataset):
     
     aopc_dict_all = {}
     for t in thresholds:
-            dict_obj, aopc_dict_ = to_eraser_dict_with_connected_graph(test_dataset, idx, explanation, model=model, k=t)
+            dict_obj, aopc_dict_ = to_eraser_dict(test_dataset, idx, explanation, model=model, k=t)
             aopc_dict_all[t] = aopc_dict_
     comp = aopc_overall(aopc_dict_all, thresholds, key='comprehensiveness_classification_scores')
     suff = aopc_overall(aopc_dict_all, thresholds, key='sufficiency_classification_scores')   
